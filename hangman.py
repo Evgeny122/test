@@ -1,23 +1,22 @@
-a = 'or'
-foo = '__'
-list_foo = list(foo)
-bar = ''
+answer = 'or'
+closed = '__'
+list_closed = list(closed)
 # нашли схожую букву
-while a != foo:
-    n = input()
-    for baz in a:
-        if baz == n:
-# нашли индекс схожий буквы
-                for index, i in enumerate(a):
-                    if i == n:
-                        list_foo[index] = n
-                        foo = (''.join(list_foo))
-                        print(foo)
-#     не могу сделать так, что когда мы пишем не верную букву, он нам писал 'нет'
-#     у меня получается так, что он в любом случае пишет 'нет', так как цикл на 8 строчке переберает дальше буквы, даже после того как нашел нужную
+while answer != closed:
+    user_input = input()
+    for n in answer:
+        if n == user_input:
+# нашли индекс схожей буквы
+                for index, i in enumerate(answer):
+                    if i == user_input:
+                        list_closed[index] = user_input
+                        closed = (''.join(list_closed))
+                        print(closed)
+# не могу сделать так, что когда мы пишем не верную букву, он нам писал 'нет'
+# у меня получается так, что он в любом случае пишет 'нет', так как цикл на 8 строчке переберает дальше буквы, даже после того как нашел нужную
 #  ??????? как мне остановить этот чертов цикл?)
-        elif baz != n:
+        elif n != user_input:
             print('нет')
                 
-# вставляем букву в foo
+# вставляем букву в closed
 print('молодец')
