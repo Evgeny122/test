@@ -7,7 +7,7 @@ while a != foo:
     n = input()
     for baz in a:
         if baz == n:
-# нашли индекс схожей буквы
+# нашли индекс схожий буквы
                 for index, i in enumerate(a):
                     if i == n:
                         list_foo[index] = n
