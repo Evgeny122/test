@@ -1,7 +1,7 @@
 limited_time = 3
 while limited_time > 0:
     user_input = input()
-    word = 'krek'
+    word = 'kr'
     for i in word:
         if i == user_input:
             print('good')
