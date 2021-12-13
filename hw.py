@@ -9,7 +9,7 @@ def logics(n):
         elif i == 0:
             back_number.append(i)
     return back_number
-
+# не пойму зачем тут нужна функция apply_to_each 
 def apply_to_each(l, f):
     l = f(l)
     return
