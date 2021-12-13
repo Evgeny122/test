@@ -16,3 +16,11 @@ def apply_to_each(l, f):
 
 apply_to_each(list_number, logics)
 print(list_number)
+
+# apply_to_each должен применять функцию к каждому объекту в списке
+def apply_to_each(func, _list):
+    for i in range(len(_list)):
+        _list[i] = func(_list[i])
+        
+apply_to_each(str, list_number)
+print(list_number)
