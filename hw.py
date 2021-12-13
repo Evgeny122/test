@@ -1,6 +1,6 @@
-number = [1, -1, 0, 14, -15, 3.15, -3.15]
+list_number = [1, -1, 0, 14, -15, 3.15, -3.15]
 
-def f(n):
+def logics(n):
     back_number = []
     for i in n:
         if i != 0:
@@ -14,5 +14,5 @@ def apply_to_each(l, f):
     l = f(l)
     return
 
-apply_to_each(number, f)
-print(number)
+apply_to_each(list_number, logics)
+print(list_number)
