@@ -1,10 +1,3 @@
-# def fib(n):
-#     if n == 1 or n == 0:
-#         return 1
-#     else:
-#         return fib(n-1) + fib(n-2)
-# print(fib(12))
-
 f = '"Ура!", вопите, дети, повару'
 w = ''
 for i in f.lower():
