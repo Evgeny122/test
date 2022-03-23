@@ -1,15 +1,44 @@
 from distutils import command
 from importlib.metadata import entry_points
 from tkinter import *
+input_user = ''
+
 # ф-ция, которая очищает поле
 def clear():
+    global input_user
     entry_field.delete(0, END)
+    input_user = ''
+    
 # ф-ция, которая выполняет указанные вырожения
 def answer():
-    input_number = entry_field.get()
-    summ = eval(input_number)
+    global input_user
+    input_user += entry_field.get()
+    summ = eval(input_user)
     entry_field.delete(0, END)
     entry_field.insert(999, summ)
+    input_user = ''
+
+# ф-ции, которые удаляют из строки цифру, и добавляют арифметический знак
+def add():
+    global input_user
+    input_user += entry_field.get()
+    input_user += '+'
+    entry_field.delete(0, END)
+def sub():
+    global input_user
+    input_user += entry_field.get()
+    input_user += '-'
+    entry_field.delete(0, END)
+def mult():
+    global input_user
+    input_user += entry_field.get()
+    input_user += '*'
+    entry_field.delete(0, END)
+def diff():
+    global input_user
+    input_user += entry_field.get()
+    input_user += '//'
+    entry_field.delete(0, END)
 
 root = Tk()
 root.title('Simple Calculator 2000')
@@ -28,10 +57,10 @@ button_8 = Button(root, text='8',command=lambda : entry_field.insert(999, 8), pa
 button_9 = Button(root, text='9',command=lambda : entry_field.insert(999, 9), padx=40, pady=20)
 button_0 = Button(root, text='0',command=lambda : entry_field.insert(999, 0), padx=40, pady=20)
 # кнопки(+, -, X, //)
-button_add = Button(root, text='+',command=lambda : entry_field.insert(999, '+'), padx=39, pady=20)
-button_sub = Button(root, text='-',command=lambda : entry_field.insert(999, '-'), padx=39, pady=20)
-button_mult = Button(root, text='x',command=lambda : entry_field.insert(999, '*'), padx=39, pady=20)
-button_diff = Button(root, text='//',command=lambda : entry_field.insert(999, '//'), padx=39, pady=20)
+button_add = Button(root, text='+',command=add, padx=39, pady=20)
+button_sub = Button(root, text='-',command=sub, padx=39, pady=20)
+button_mult = Button(root, text='x',command=mult, padx=39, pady=20)
+button_diff = Button(root, text='//',command=diff, padx=39, pady=20)
 # кнопки (Clear, =)
 button_equa1 = Button(root, text='=',command=answer, padx=40, pady=20)
 button_clear = Button(root, text='Clear',command=clear, padx=40, pady=20)
