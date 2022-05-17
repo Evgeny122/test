@@ -1,7 +1,4 @@
-from encodings import CodecRegistryError
-from textwrap import fill
 from tkinter import *
-from unittest import removeResult
 # нужно вренуться и убрать импорт звезд
 CANVAS_SIZE = 600
 FIGURE_SIZE = 200
@@ -12,6 +9,7 @@ coords = 0
 # Players setup
 X = 'player 1'
 O = 'player 2'
+list_pl = [X, O]
 FIRST_PLAYER = X
 
 class Board(Tk):
@@ -61,11 +59,13 @@ class Board(Tk):
         self.event = event
         x_coord = event.x // FIGURE_SIZE
         y_coord = event.y // FIGURE_SIZE
-        self.make_move(x_coord, y_coord)
-        print(event.x, event.y)
-        
-        print(x_coord, y_coord)
-       
+        if x_coord == 3:
+            x_coord = 2
+        if y_coord == 3:
+            y_coord = 2
+        self.ind_x_coord = x_coord
+        self.ind_y_coord = y_coord
+        self.make_move(x_coord, y_coord)       
     
     def make_move(self, x, y):
         d = {}
@@ -74,47 +74,37 @@ class Board(Tk):
         
         current_player = self.current_player
 
+
         if self.board[x][y] == EMPTY:
             self.update_board(x, y)
+            self.change_player()
+            if current_player == X:
+                self.render_cross(d[x], d[y])
+            elif current_player == O:
+                self.render_circle(d[x], d[y])
+        
 
     def update_board(self, x, y):
         c_player = self.current_player
         self.board[x][y] = c_player
-        print(self.board)
         if self.check_win(self.board, c_player):
             self.winner(c_player)
             self.win_line(self.event.x , self.event.y)
         elif self.check_draw(self.board):
             self.winner()
     
-    def win_line(self, x, y):
+    def win_line(self):
         if self.coords == 1:
-            if y <= 200:
-                self.canvas.create_line(0, 100, 600, 100, fill='green')
-            elif y <= 400 and y > 200:
-                self.canvas.create_line(0, 300, 600, 300, fill='green')
-            elif y <= 600 and y > 400:
-                self.canvas.create_line(0, 500, 600, 500, fill='green')
+            self.canvas.create_line(0, (self.ind_y_coord * FIGURE_SIZE) + (FIGURE_SIZE // 2), CANVAS_SIZE, (self.ind_y_coord * FIGURE_SIZE) + (FIGURE_SIZE // 2), fill='green')   
         if self.coords == 2:
-            if x <= 200:
-                self.canvas.create_line(100, 0, 100, 600, fill='green')
-            elif x <= 400 and x > 200:
-                self.canvas.create_line(300, 0, 300, 600, fill='green')
-            elif x <= 600 and x > 400:
-                self.canvas.create_line(500, 0, 500, 600, fill='green')
+            self.canvas.create_line((self.ind_x_coord * FIGURE_SIZE) + (FIGURE_SIZE // 2), 0, (self.ind_x_coord * FIGURE_SIZE) + (FIGURE_SIZE // 2), CANVAS_SIZE, fill='green')
         if self.coords == 3:
-            self.canvas.create_line(0, 0, 600, 600, fill='green')
+            self.canvas.create_line(0, 0, CANVAS_SIZE, CANVAS_SIZE, fill='green')
         if self.coords == 4:
-            self.canvas.create_line(600, 0, 0, 600, fill='green')
-            
-
-
-    
-        
-        
-    
+            self.canvas.create_line(CANVAS_SIZE, 0, 0, CANVAS_SIZE, fill='green')
+                
     def check_win(self, board, player):
-        '''список строятся вертикально'''
+        '''списки строятся вертикально'''
         s = [player]
         s = s * len(board)
         '''счетчик слева-направо'''
@@ -156,30 +146,19 @@ class Board(Tk):
                 if timer_right_left == 3:
                     self.coords += 4
                     return True
-                
-
-                    
-        
-                    
+                                  
     def check_draw(self, board):
-        pass
-
-
-
-
-
-        
-
-
-
-
-        
-
+        for row in board:
+            if EMPTY in row:
+                return False
+        return True
+    
+    def change_player(self):
+        if self.current_player == X:
+            self.current_player = O
+        else:
+            self.current_player = X
 
 game_v1 = Board(start_player=FIRST_PLAYER)
 game_v1.build_grid('red')
-
-
-
-
 game_v1.mainloop()
