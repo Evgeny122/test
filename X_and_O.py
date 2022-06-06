@@ -25,6 +25,7 @@ class Board(Tk):
             [EMPTY, EMPTY, EMPTY],
             [EMPTY, EMPTY, EMPTY],
             [EMPTY, EMPTY, EMPTY]]
+        self.game_status = True
     def build_grid(self, grid_color):
         line = RATIO - 1
         start_x = 0
@@ -46,6 +47,7 @@ class Board(Tk):
         self.canvas.create_oval(posX, posY, posX + f_size, posY + f_size, outline='green', width=5)
         
     def winner(self, player=None):
+        self.game_status = False
         center = CANVAS_SIZE // 2
         if player:
             text = f'Winner: {player}'
@@ -56,6 +58,7 @@ class Board(Tk):
 
         
     def click_event(self, event):
+        print(event.x, event.y)
         self.event = event
         x_coord = event.x // FIGURE_SIZE
         y_coord = event.y // FIGURE_SIZE
@@ -65,7 +68,9 @@ class Board(Tk):
             y_coord = 2
         self.ind_x_coord = x_coord
         self.ind_y_coord = y_coord
-        self.make_move(x_coord, y_coord)       
+        self.make_move(x_coord, y_coord)   
+        if self.game_status:
+            self.ai_best_move()    
     
     def make_move(self, x, y):
         d = {}
@@ -73,7 +78,6 @@ class Board(Tk):
             d[i] = FIGURE_SIZE * i
         
         current_player = self.current_player
-
 
         if self.board[x][y] == EMPTY:
             self.update_board(x, y)
@@ -89,11 +93,12 @@ class Board(Tk):
         self.board[x][y] = c_player
         if self.check_win(self.board, c_player):
             self.winner(c_player)
-            self.win_line(self.event.x , self.event.y)
+            self.win_line()
         elif self.check_draw(self.board):
             self.winner()
     
     def win_line(self):
+        print(self.coords)
         if self.coords == 1:
             self.canvas.create_line(0, (self.ind_y_coord * FIGURE_SIZE) + (FIGURE_SIZE // 2), CANVAS_SIZE, (self.ind_y_coord * FIGURE_SIZE) + (FIGURE_SIZE // 2), fill='green')   
         if self.coords == 2:
@@ -118,13 +123,13 @@ class Board(Tk):
         '''вертикальная проверка'''
         for i in board:
             if i == s:
-                self.coords += 2
+                self.coords = 2
                 return True
 
         '''горизонтальная проверка'''
         for i in range(len(board)):
             if board[0][i] == player and board[1][i] == player and board[2][i] == player:
-                self.coords += 1
+                self.coords = 1
                 return True
         
         '''проверка по диагонале справа-налево'''
@@ -134,7 +139,7 @@ class Board(Tk):
             else:
                 timer_left_right += 1
                 if timer_left_right == 3:
-                    self.coords += 3
+                    self.coords = 3
                     return True
 
         '''проверка по диагонале слева-направо'''                     
@@ -144,7 +149,7 @@ class Board(Tk):
             else:
                 timer_right_left += 1
                 if timer_right_left == 3:
-                    self.coords += 4
+                    self.coords = 4
                     return True
                                   
     def check_draw(self, board):
@@ -158,6 +163,55 @@ class Board(Tk):
             self.current_player = O
         else:
             self.current_player = X
+
+
+    def minimax(self, board, isMax):
+        board_len = range(len(self.board))
+
+        if self.check_win(board, O):
+            return 1
+        elif self.check_win(board, X):
+            return -1
+        elif self.check_draw(board):
+            return 0
+        if isMax:
+            best_score = float('-inf')
+            for i in board_len:
+                for j in board_len:
+                    if board[i][j] == EMPTY:
+                        board[i][j] = O
+                        score = self.minimax(board, False)
+                        board[i][j] = EMPTY
+                        best_score = max(score, best_score)
+        else:
+            best_score = float('inf')
+            for i in board_len:
+                for j in board_len:
+                    if board[i][j] == EMPTY:
+                        board[i][j] = X
+                        score = self.minimax(board, True)
+                        board[i][j] = EMPTY
+                        best_score = min(score, best_score)
+        return best_score
+    def ai_best_move(self):
+        best_score = float('-inf')
+        board_len = range(len(self.board))
+        board = self.board[:]
+        for i in board_len:
+            for j in board_len:
+                if board[i][j] == EMPTY:
+                    board[i][j] = O
+                    score = self.minimax(board, False)
+                    board[i][j] = EMPTY
+                    if score > best_score:
+                        best_score = score
+                        move = i, j
+        
+        self.make_move(move[0], move[1])
+
+
+    
+
 
 game_v1 = Board(start_player=FIRST_PLAYER)
 game_v1.build_grid('red')
