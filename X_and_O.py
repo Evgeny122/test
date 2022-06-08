@@ -93,16 +93,24 @@ class Board(Tk):
         self.board[x][y] = c_player
         if self.check_win(self.board, c_player):
             self.winner(c_player)
-            self.win_line()
+            self.win_line(c_player)
         elif self.check_draw(self.board):
             self.winner()
     
-    def win_line(self):
-        print(self.coords)
+    def win_line(self, c_player):
+        x_win_line = 0
+        y_win_line = 0
+        if c_player == X:
+            x_win_line = self.ind_x_coord
+            y_win_line = self.ind_y_coord
+        else:
+            x_win_line = self.move[0]
+            y_win_line = self.move[1]
+            
         if self.coords == 1:
-            self.canvas.create_line(0, (self.ind_y_coord * FIGURE_SIZE) + (FIGURE_SIZE // 2), CANVAS_SIZE, (self.ind_y_coord * FIGURE_SIZE) + (FIGURE_SIZE // 2), fill='green')   
+            self.canvas.create_line(0, (y_win_line * FIGURE_SIZE) + (FIGURE_SIZE // 2), CANVAS_SIZE, (y_win_line * FIGURE_SIZE) + (FIGURE_SIZE // 2), fill='green')
         if self.coords == 2:
-            self.canvas.create_line((self.ind_x_coord * FIGURE_SIZE) + (FIGURE_SIZE // 2), 0, (self.ind_x_coord * FIGURE_SIZE) + (FIGURE_SIZE // 2), CANVAS_SIZE, fill='green')
+            self.canvas.create_line((x_win_line * FIGURE_SIZE) + (FIGURE_SIZE // 2), 0, (x_win_line * FIGURE_SIZE) + (FIGURE_SIZE // 2), CANVAS_SIZE, fill='green')
         if self.coords == 3:
             self.canvas.create_line(0, 0, CANVAS_SIZE, CANVAS_SIZE, fill='green')
         if self.coords == 4:
@@ -206,6 +214,7 @@ class Board(Tk):
                     if score > best_score:
                         best_score = score
                         move = i, j
+                        self.move = move
         
         self.make_move(move[0], move[1])
 
