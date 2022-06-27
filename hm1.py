@@ -75,7 +75,7 @@ def count_find_num(numbers, limited):
                 if ans_var <= limited:
                     lst_summ.append(ans_var)
         repeat_limited -= 1
-    return max(lst_summ), len(lst_summ)
+    return [len(lst_summ), max(lst_summ)]
 
                 
 
